@@ -9,6 +9,8 @@ var response = require('..');
 
 var bbop = require('bbop-core');
 
+var us = require('underscore');
+
 var same = assert.equal;
 
 ///
@@ -33,7 +35,7 @@ describe('regressions tests', function(){
     });
 });
 
-describe('data tests', function(){
+describe('fake data tests', function(){
 
     it('Real data coming in (20140225)', function(){
 
@@ -100,5 +102,29 @@ describe('data tests', function(){
 
 	same(resp.relations().length, 2, 'two bits of ev');
 	
+    });
+});
+
+describe('real data tests', function(){
+
+    it('Real data coming in (20150806)', function(){
+
+	var raw = require('./response-meta-2015-08-06.json');
+	var resp = new response(raw);
+
+	assert.isAbove(resp.relations().length, 2, 'at least two bits of ev');
+	assert.isAbove(us.keys(resp.models_meta()).length, 20,
+		       'at least two bits of meta');
+	assert.isAbove(us.keys(resp.models_meta_read_only()).length, 20,
+		       'at least two bits of meta-ro');
+	assert.equal(us.keys(resp.models_meta_read_only()).length,
+		     us.keys(resp.models_meta()).length,
+		     'meta and meta-ro are the same');
+
+	// Take one of the meta objects and see what's there.
+	var mro_01_id = us.keys(resp.models_meta_read_only())[0];
+	var mro_01 = resp.models_meta_read_only()[mro_01_id];
+	assert.equal(mro_01['modified-p'], false, 'not modified');
+
     });
 });
