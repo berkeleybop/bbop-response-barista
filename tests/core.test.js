@@ -107,9 +107,9 @@ describe('fake data tests', function(){
 
 describe('real data tests', function(){
 
-    it('Real data coming in (20150806)', function(){
+    it('Real meta data coming in (20150807)', function(){
 
-	var raw = require('./response-meta-2015-08-06.json');
+	var raw = require('./response-meta-2015-08-07.json');
 	var resp = new response(raw);
 
 	assert.isAbove(resp.relations().length, 2, 'at least two bits of ev');
@@ -125,6 +125,18 @@ describe('real data tests', function(){
 	var mro_01_id = us.keys(resp.models_meta_read_only())[0];
 	var mro_01 = resp.models_meta_read_only()[mro_01_id];
 	assert.equal(mro_01['modified-p'], false, 'not modified');
+
+    });
+
+    it('Real model data coming in (20150807)', function(){
+
+	var raw = require('./response-gomodel-55ad81df00000001-2015-08-07.json');
+	var resp = new response(raw);
+
+	assert.equal(resp.modified_p(), true, 'modified');
+	assert.equal(resp.inconsistent_p(), false, 'aight');
+	assert.equal(resp.has_undo_p(), false, 'nope 1');
+	assert.equal(resp.has_redo_p(), false, 'nope 2');
 
     });
 });
