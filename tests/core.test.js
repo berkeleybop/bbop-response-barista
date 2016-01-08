@@ -41,6 +41,7 @@ describe('fake data tests', function(){
 
 	var raw = {"uid":"foo",
 		   "intention":"information",
+		   "is-reasoned":false,
 		   "signal":"rebuild",
 		   "message-type":"success",
 		   "message":"success",
@@ -57,6 +58,7 @@ describe('fake data tests', function(){
 	same(resp.message(), 'success', 'success message');
 	same(resp.user_id(), 'foo', 'foo user');
 	same(resp.intention(), 'information', 'just want info');
+	same(resp.reasoner_p(), false, 'reasoner not used');
 	same(resp.signal(), 'rebuild', 'but will need to rebuild');
 	same(resp.commentary(), null, 'no comments');
 	same(bbop.what_is(resp.data()), 'object', 'have some data');
@@ -76,6 +78,7 @@ describe('fake data tests', function(){
 	var raw = {
 	    "packet-id": "1346eb5701b2410",
 	    "intention": "query",
+	    "is-reasoned": true,
 	    "signal": "meta",
 	    "message-type": "success",
 	    "message": "success: 0",
@@ -101,6 +104,7 @@ describe('fake data tests', function(){
 	var resp = new response(raw);
 
 	same(resp.relations().length, 2, 'two bits of ev');
+	same(resp.reasoner_p(), true, 'reasoner used');
 	
     });
 });
