@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "bbop-core": "0.0.5",
-        "bbop-rest-response": "0.0.3",
+        "bbop-rest-response": "0.0.4",
         "underscore": "1.8.3"
     },
     "devDependencies": {
