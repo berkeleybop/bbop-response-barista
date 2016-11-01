@@ -1,0 +1,9 @@
+{
+  "message": "Dumped all models to folder",
+  "message-type": "success",
+  "intention": "query",
+  "is-reasoned": false,
+  "provided-by": [],
+  "uid": "GOC:kltm",
+  "packet-id": "387be0c4966d2"
+}

@@ -143,4 +143,36 @@ describe('real data tests', function(){
 	assert.equal(resp.has_redo_p(), false, 'nope 2');
 
     });
+
+    it('Real post-add Scratch data (2016-11-01)', function(){
+
+	var raw = require('./response-gomodel-55ad81df00000001-action-2016-11-01.json');
+	var resp = new response(raw);
+
+	assert.equal(resp.okay(), true, 'okay resp');
+	assert.equal(us.isArray(resp.groups()), true, 'groups!');
+	assert.deepEqual(resp.provided_by(), resp.groups(),
+			 'groups are groups');
+	assert.deepEqual(resp.groups(), ['http://geneontology.org'],
+			 'groups are');
+	assert.equal(resp.intention(), 'action', 'action!');
+	assert.equal(resp.signal(), 'merge', 'merge!');
+
+    });
+
+    // TODO: As this is a little lame:
+    // https://github.com/geneontology/minerva/issues/39#issuecomment-257717977
+    it('Real store-only model data coming in (2016-11-01)', function(){
+
+	var raw = require('./response-meta-dump-2016-11-01.json');
+	var resp = new response(raw);
+
+	assert.equal(resp.okay(), true, 'okay resp');
+	assert.equal(resp.groups(), null, 'no groups');
+	assert.equal(resp.provided_by(), null, 'no groups 2');
+	assert.equal(resp.intention(), 'query', 'intention: '+ resp.intention());
+	assert.equal(resp.message(), 'Dumped all models to folder', 'ugh');
+
+    });
+
 });
