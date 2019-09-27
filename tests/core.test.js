@@ -24,14 +24,14 @@ describe('regressions tests', function(){
 	var raw = {"message-type":"error",
 		   "message":"Exception!",
 		   "commentary":"blah"};
-	
+
 	var resp = new response(raw);
 
 	same(resp.okay(), true, 'viable response');
 	same(resp.message_type(), 'error', 'm type');
 	same(resp.message(), 'Exception!', 'm');
 	same(resp.commentary(), 'blah', 'comments');
-     
+
     });
 });
 
@@ -52,7 +52,7 @@ describe('fake data tests', function(){
 			  }
 		  };
 	var resp = new response(raw);
-     
+
 	same(resp.okay(), true, 'viable real response');
 	same(resp.message_type(), 'success', 'success type');
 	same(resp.message(), 'success', 'success message');
@@ -70,9 +70,9 @@ describe('fake data tests', function(){
 	same(resp.individuals().length, 0, 'removed individuals for test');
 	same(resp.relations().length, 0, 'no relations requested');
 	same(resp.evidence().length, 0, 'no evidence requested');
-	
+
     });
-    
+
     it('Real (truncated) data coming in (20150420)', function(){
 
 	var raw = {
@@ -84,7 +84,7 @@ describe('fake data tests', function(){
 	    "message": "success: 0",
 	    "data": {
 		"meta": {
-		    "relations": 
+		    "relations":
 		    [
 			{
 			    "id": "BFO:0000050",
@@ -100,12 +100,12 @@ describe('fake data tests', function(){
 		}
 	    }
 	};
-	
+
 	var resp = new response(raw);
 
 	same(resp.relations().length, 2, 'two bits of ev');
 	same(resp.reasoner_p(), true, 'reasoner used');
-	
+
     });
 });
 
@@ -173,6 +173,60 @@ describe('real data tests', function(){
 	assert.equal(resp.intention(), 'query', 'intention: '+ resp.intention());
 	assert.equal(resp.message(), 'Dumped all models to folder', 'ugh');
 
+    });
+});
+
+describe('validation - bad', function(){
+
+    // Check that valid and invalid models work as expected.
+    it('Works as expected (2019-09-25)', function(){
+
+	var raw = require('./response-gomodel-5d88482400000052-2019-09-25.json');
+	var resp = new response(raw);
+
+	// Make sure we;re still sane after all these years.
+	assert.equal(resp.okay(), true, 'okay resp');
+	assert.equal(resp.groups(), null, 'no groups');
+	assert.equal(resp.intention(), 'query', 'intention: '+ resp.intention());
+
+
+	assert.equal(resp.valid_p(), false, 'overall invalid');
+	assert.equal(resp.valid_owl_p(), true, 'owl valid');
+	assert.equal(resp.valid_shex_p(), false, 'shex invalid');
+
+	assert.equal(us.isArray(resp.shex_violations()), true, 'have violations');
+
+	assert.equal(resp.shex_violations().length, 2, 'has 2 violations');
+
+	// Examine the structure of the shex violations returns.
+	us.each(resp.shex_violations(), function(v){
+	    assert.equal(us.isString(v['node']), true, 'has node id as string');
+	    assert.equal(us.isArray(v['explanations']), true, 'has exp');
+	});
+    });
+
+});
+
+describe('validation - good', function(){
+
+    // Check that valid and invalid models work as expected.
+    it('Does not work as expected (2019-09-26)', function(){
+
+	var raw = require('./response-gomodel-R-HSA-159740-2019-09-26.json');
+	var resp = new response(raw);
+
+	// Make sure we;re still sane after all these years.
+	assert.equal(resp.okay(), true, 'okay resp');
+	assert.equal(resp.groups(), null, 'no groups');
+	assert.equal(resp.intention(), 'query', 'intention: '+ resp.intention());
+
+	assert.equal(resp.valid_p(), true, 'overall valid');
+	assert.equal(resp.valid_owl_p(), true, 'owl valid');
+	assert.equal(resp.valid_shex_p(), true, 'shex valid');
+
+	assert.equal(us.isArray(resp.shex_violations()), true, 'have violations');
+
+	assert.equal(resp.shex_violations().length, 0, 'has no violations');
     });
 
 });
