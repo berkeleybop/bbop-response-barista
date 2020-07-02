@@ -1,6 +1,6 @@
 {
     "name": "bbop-response-barista",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "license": "BSD-3-Clause",
     "description": "Response handler for dealing with the parsing of responses from Barista (enveloping Minerva).",
     "keywords": [
